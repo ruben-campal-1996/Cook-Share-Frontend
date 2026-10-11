@@ -1,0 +1,76 @@
+:root {
+  /* ========================================
+     SPACING SCALE
+     md = 1rem (16px)
+     ======================================== */
+
+  --spacing-5xs: 0.125rem; /* 2px */
+  --spacing-4xs: 0.25rem; /* 4px */
+  --spacing-3xs: 0.375rem; /* 6px */
+  --spacing-2xs: 0.5rem; /* 8px */
+  --spacing-xs: 0.75rem; /* 12px */
+  --spacing-sm: 0.875rem; /* 14px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-2xl: 3rem; /* 48px */
+  --spacing-3xl: 4rem; /* 64px */
+  --spacing-4xl: 6rem; /* 96px */
+  --spacing-5xl: 8rem; /* 128px */
+
+  /* ========================================
+     COLOUR PALETTE
+     ======================================== */
+
+  /* Principal — Verde bosque */
+  --color-primary-50: #f2f4f3;
+  --color-primary-100: #e6e9e8;
+  --color-primary-200: #c4ccc9;
+  --color-primary-300: #9aa8a2;
+  --color-primary-400: #687d74;
+  --color-primary-500: #2d4a3e;
+  --color-primary-600: #284137;
+  --color-primary-700: #22382e;
+  --color-primary-800: #1b2c25;
+  --color-primary-900: #14211c;
+  --color-primary-950: #0e1814;
+
+  /* Secundario — Terracota */
+  --color-secondary-50: #fdf6f4;
+  --color-secondary-100: #faede8;
+  --color-secondary-200: #f4d6ca;
+  --color-secondary-300: #edb8a5;
+  --color-secondary-400: #e49478;
+  --color-secondary-500: #d96b43;
+  --color-secondary-600: #bf5e3b;
+  --color-secondary-700: #a35032;
+  --color-secondary-800: #824028;
+  --color-secondary-900: #62301e;
+  --color-secondary-950: #452215;
+
+  /* Terciario — Mostaza dorada */
+  --color-tertiary-50: #fdfaf3;
+  --color-tertiary-100: #fcf5e8;
+  --color-tertiary-200: #f8e7c8;
+  --color-tertiary-300: #f3d6a1;
+  --color-tertiary-400: #ecc173;
+  --color-tertiary-500: #e5a93c;
+  --color-tertiary-600: #ca9535;
+  --color-tertiary-700: #ac7f2d;
+  --color-tertiary-800: #896524;
+  --color-tertiary-900: #674c1b;
+  --color-tertiary-950: #493613;
+
+  /* Neutral — Verde casi negro */
+  --color-neutral-50: #f2f2f2;
+  --color-neutral-100: #e4e5e5;
+  --color-neutral-200: #c0c3c1;
+  --color-neutral-300: #939895;
+  --color-neutral-400: #5e6561;
+  --color-neutral-500: #1f2923;
+  --color-neutral-600: #1b241f;
+  --color-neutral-700: #171f1a;
+  --color-neutral-800: #131915;
+  --color-neutral-900: #0e1210;
+  --color-neutral-950: #0a0d0b;
+}
