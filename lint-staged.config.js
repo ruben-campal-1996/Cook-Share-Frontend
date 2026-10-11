@@ -1,6 +1,6 @@
 export default {
-  'src/**/*.ts': () => 'ng lint --fix',
-  'src/**/*.html': ['prettier --write'],
+  'src/**/*.ts': ['eslint --fix', 'prettier --write'],
+  'src/**/*.html': ['eslint --fix', 'prettier --write'],
   'src/**/*.css': ['prettier --write'],
   'src/**/*.json': ['prettier --write']
 };
