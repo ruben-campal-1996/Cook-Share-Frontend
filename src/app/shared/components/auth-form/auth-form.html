@@ -1,0 +1,20 @@
+<form #authForm class="auth-form" [attr.aria-label]="title()" (submit)="onSubmit($event, authForm)">
+  <h1 class="auth-form__title">{{ title() }}</h1>
+
+  <div class="auth-form__fields">
+    @for (field of fields(); track field.name) {
+      <label class="auth-form__field">
+        <span>{{ field.label }}</span>
+        <input
+          [type]="field.type"
+          [name]="field.name"
+          [attr.placeholder]="field.placeholder ?? null"
+          [attr.autocomplete]="field.autocomplete ?? null"
+          [required]="field.required ?? false"
+        />
+      </label>
+    }
+  </div>
+
+  <button class="auth-form__submit" type="submit">{{ submitLabel() }}</button>
+</form>
