@@ -22,9 +22,13 @@
     </div>
   } @else if (recipes().length === 0) {
     <p class="py-10 text-center text-stone-600">Todavía no hay recetas para mostrar.</p>
+  } @else if (filteredRecipes().length === 0) {
+    <p class="py-10 text-center text-stone-600">
+      No hay recetas que coincidan con todas las categorías seleccionadas.
+    </p>
   } @else {
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      @for (recipe of recipes(); track recipe.id) {
+      @for (recipe of filteredRecipes(); track recipe.id) {
         <a
           class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
           [routerLink]="['/recipe-details', recipe.id]"

@@ -32,6 +32,7 @@ describe('Recipes', () => {
     instructions: 'Cocinar las patatas y los huevos.',
     imageUrl: 'https://example.com/tortilla.jpg',
     servings: 4,
+    categoryIds: [1],
     authorId: 10,
     statusId: 1,
     totalCalories: 800,
@@ -65,6 +66,56 @@ describe('Recipes', () => {
     );
     expect(component.resolveImageUrl('https://cdn.example.com/recipe.png')).toBe(
       'https://cdn.example.com/recipe.png',
+    );
+  });
+
+  it('filters recipes to those matching every selected category', () => {
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/recipes').flush([
+      recipe,
+      {
+        ...recipe,
+        id: 2,
+        name: 'Ensalada',
+        categoryIds: [1, 2],
+      },
+      {
+        ...recipe,
+        id: 3,
+        name: 'Postre',
+        categoryIds: [2],
+      },
+    ]);
+    fixture.componentRef.setInput('selectedCategoryIds', [1, 2]);
+    fixture.detectChanges();
+
+    expect(component.filteredRecipes().map(({ name }) => name)).toEqual(['Ensalada']);
+    const recipeTitles: string[] = Array.from(
+      fixture.nativeElement.querySelectorAll('h2'),
+      (heading: Element) => heading.textContent?.trim() ?? '',
+    );
+    expect(recipeTitles).toEqual(['Ensalada']);
+  });
+
+  it('shows all recipes when no category is selected', () => {
+    fixture.detectChanges();
+    httpTesting
+      .expectOne('/api/v1/recipes')
+      .flush([recipe, { ...recipe, id: 2, name: 'Ensalada', categoryIds: [2] }]);
+    fixture.detectChanges();
+
+    expect(component.filteredRecipes()).toHaveLength(2);
+  });
+
+  it('shows an empty result message when no recipe matches the selection', () => {
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/recipes').flush([recipe]);
+    fixture.componentRef.setInput('selectedCategoryIds', [2]);
+    fixture.detectChanges();
+
+    expect(component.filteredRecipes()).toHaveLength(0);
+    expect(fixture.nativeElement.textContent).toContain(
+      'No hay recetas que coincidan con todas las categorías seleccionadas.',
     );
   });
 

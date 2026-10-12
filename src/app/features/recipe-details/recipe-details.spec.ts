@@ -18,6 +18,7 @@ describe('RecipeDetails', () => {
     instructions: '1. Cortar las patatas.\n2. Cocinar y servir.',
     imageUrl: './images/tortilla.png',
     servings: 4,
+    categoryIds: [1],
     authorId: 1,
     statusId: 1,
     totalCalories: 800,

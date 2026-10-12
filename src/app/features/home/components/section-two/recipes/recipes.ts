@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { Recipe } from '../../../../../api/recipe.model';
@@ -15,7 +15,18 @@ export class Recipes implements OnInit {
   private readonly recipeService = inject(RecipeService);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly selectedCategoryIds = input<number[]>([]);
   readonly recipes = signal<Recipe[]>([]);
+  readonly filteredRecipes = computed(() => {
+    const selectedIds = this.selectedCategoryIds();
+    if (selectedIds.length === 0) {
+      return this.recipes();
+    }
+
+    return this.recipes().filter((recipe) =>
+      selectedIds.every((categoryId) => recipe.categoryIds.includes(categoryId)),
+    );
+  });
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
