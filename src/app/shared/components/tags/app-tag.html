@@ -1,0 +1,9 @@
+<button
+  class="rounded-full border border-[var(--color-primary-500)] bg-transparent px-[var(--spacing-md)] py-[var(--spacing-2xs)] text-sm font-medium text-[var(--color-primary-500)] transition-colors hover:bg-[var(--color-primary-50)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-500)]"
+  [style.backgroundColor]="selected() ? 'var(--color-primary-50)' : null"
+  [attr.aria-pressed]="selected()"
+  type="button"
+  (click)="toggle()"
+>
+  {{ label() }}
+</button>
