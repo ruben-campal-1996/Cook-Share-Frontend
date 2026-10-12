@@ -1,4 +1,5 @@
 import { Component, input, output } from '@angular/core';
+import { AppButton } from '../button/app-button';
 
 export interface AuthFormField {
   name: string;
@@ -10,6 +11,7 @@ export interface AuthFormField {
 }
 
 @Component({
+  imports: [AppButton],
   selector: 'app-auth-form',
   templateUrl: './auth-form.html',
   styleUrl: './auth-form.css',
