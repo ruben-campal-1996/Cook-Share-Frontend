@@ -1,1 +1,32 @@
-<p>filter-exploration works!</p>
+<section class="mx-auto max-w-7xl px-6 py-8" aria-labelledby="category-filters-title">
+  <h2 id="category-filters-title" class="mb-4 text-2xl font-semibold text-stone-900">
+    Explora por categoría
+  </h2>
+
+  @if (loading()) {
+    <p class="text-stone-600" role="status">Cargando categorías...</p>
+  } @else if (error(); as errorMessage) {
+    <div class="flex flex-wrap items-center gap-3" role="alert">
+      <p class="text-red-800">{{ errorMessage }}</p>
+      <button
+        class="rounded-md border border-[var(--color-primary-500)] px-[var(--spacing-sm)] py-[var(--spacing-2xs)] text-[var(--color-primary-500)] hover:bg-[var(--color-primary-50)]"
+        type="button"
+        (click)="loadCategories()"
+      >
+        Reintentar
+      </button>
+    </div>
+  } @else if (categories().length === 0) {
+    <p class="text-stone-600">No hay categorías disponibles.</p>
+  } @else {
+    <div class="flex flex-wrap gap-3">
+      @for (category of categories(); track category.id) {
+        <app-tag
+          [label]="category.name"
+          [selected]="selectedCategoryIds().includes(category.id)"
+          (selectedChange)="setCategorySelected(category.id, $event)"
+        />
+      }
+    </div>
+  }
+</section>
