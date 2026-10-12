@@ -3,6 +3,8 @@ import { Component, DestroyRef, computed, inject, OnInit, signal } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, distinctUntilChanged, map, merge, of, Subject, switchMap, tap } from 'rxjs';
+import { Category } from '../../api/category.model';
+import { CategoryService } from '../../api/category.service';
 import { Recipe } from '../../api/recipe.model';
 import { RecipeService } from '../../api/recipe.service';
 
@@ -15,13 +17,27 @@ import { RecipeService } from '../../api/recipe.service';
 export class RecipeDetails implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly recipeService = inject(RecipeService);
+  private readonly categoryService = inject(CategoryService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly retryRequests = new Subject<string | null>();
   private currentId: string | null = null;
 
   readonly recipe = signal<Recipe | null>(null);
+  readonly categories = signal<Category[]>([]);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
+  readonly categoriesError = signal<string | null>(null);
+  readonly recipeCategories = computed(() => {
+    const recipe = this.recipe();
+    if (!recipe) {
+      return [];
+    }
+
+    const categoriesById = new Map(this.categories().map((category) => [category.id, category]));
+    return recipe.categoryIds
+      .map((categoryId) => categoriesById.get(categoryId))
+      .filter((category): category is Category => category !== undefined);
+  });
   readonly instructionSteps = computed(() => {
     const instructions = this.recipe()?.instructions ?? '';
     return instructions
@@ -64,6 +80,24 @@ export class RecipeDetails implements OnInit {
       .subscribe((recipe) => {
         this.recipe.set(recipe);
         this.loading.set(false);
+        if (recipe) {
+          this.loadCategories();
+        }
+      });
+  }
+
+  private loadCategories(): void {
+    this.categoriesError.set(null);
+    this.categories.set([]);
+    this.categoryService
+      .getCategories()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (categories) => this.categories.set(categories),
+        error: (error: HttpErrorResponse) => {
+          console.error('Failed to load recipe categories', error);
+          this.categoriesError.set('No se han podido cargar las categorías de la receta.');
+        },
       });
   }
 
