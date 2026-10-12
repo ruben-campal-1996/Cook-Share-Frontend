@@ -1,2 +1,2 @@
-<app-filter-exploration />
-<app-recipes />
+<app-filter-exploration (selectedCategoryIdsChange)="selectedCategoryIds.set($event)" />
+<app-recipes [selectedCategoryIds]="selectedCategoryIds()" />

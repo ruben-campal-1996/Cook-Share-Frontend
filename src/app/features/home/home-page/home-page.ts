@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FilterExploration } from '../components/section-one/filter-exploration/filter-exploration';
 import { Recipes } from '../components/section-two/recipes/recipes';
 
@@ -8,4 +8,6 @@ import { Recipes } from '../components/section-two/recipes/recipes';
   styleUrl: './home-page.css',
   templateUrl: './home-page.html',
 })
-export class HomePage {}
+export class HomePage {
+  readonly selectedCategoryIds = signal<number[]>([]);
+}
