@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:e2e": "playwright test",
     "prepare": "husky"
   },
   "private": true,
@@ -25,6 +26,7 @@
     "@angular/build": "^22.2.0",
     "@angular/cli": "^22.2.0",
     "@angular/compiler-cli": "^22.2.0",
+    "@playwright/test": "^1.56.1",
     "@eslint/js": "^10.0.1",
     "@ngx-env/builder": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
