@@ -47,6 +47,66 @@ describe('FilterExploration', () => {
     expect(component.selectedCategoryIds()).toEqual([1]);
   });
 
+  it('shows at most seven categories and lets users expand and collapse the list', () => {
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/categories').flush(
+      Array.from({ length: 9 }, (_, index) => ({
+        id: index + 1,
+        name: `Category ${index + 1}`,
+      })),
+    );
+    fixture.detectChanges();
+
+    const getTagButtons = (): NodeListOf<HTMLButtonElement> =>
+      fixture.nativeElement.querySelectorAll('app-tag button');
+    const getToggleButton = (): HTMLButtonElement =>
+      fixture.nativeElement.querySelector('app-button button');
+
+    expect(getTagButtons().length).toBe(7);
+    expect(getToggleButton().textContent).toContain('Ver todas');
+
+    getToggleButton().click();
+    fixture.detectChanges();
+    expect(getTagButtons().length).toBe(9);
+    expect(getToggleButton().textContent).toContain('Ver menos');
+
+    getToggleButton().click();
+    fixture.detectChanges();
+    expect(getTagButtons().length).toBe(7);
+  });
+
+  it('collapses the expanded category list when a category is selected', () => {
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/categories').flush(
+      Array.from({ length: 9 }, (_, index) => ({
+        id: index + 1,
+        name: `Category ${index + 1}`,
+      })),
+    );
+    fixture.detectChanges();
+
+    const getTagButtons = (): NodeListOf<HTMLButtonElement> =>
+      fixture.nativeElement.querySelectorAll('app-tag button');
+    const getToggleButton = (): HTMLButtonElement =>
+      fixture.nativeElement.querySelector('app-button button');
+    const section = fixture.nativeElement.querySelector('section') as HTMLElement;
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(section, 'scrollIntoView', { value: scrollIntoView });
+
+    getToggleButton().click();
+    fixture.detectChanges();
+    expect(getTagButtons().length).toBe(9);
+
+    getTagButtons()[8].click();
+    fixture.detectChanges();
+
+    expect(getTagButtons().length).toBe(7);
+    expect(getTagButtons()[0].textContent?.trim()).toBe('#Category 9');
+    expect(getTagButtons()[0].getAttribute('aria-pressed')).toBe('true');
+    expect(getToggleButton().textContent).toContain('Ver todas');
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'start' });
+  });
+
   it('filters category tags by search text, ignoring case and accents', () => {
     fixture.detectChanges();
     httpTesting.expectOne('/api/v1/categories').flush([

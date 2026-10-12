@@ -1,13 +1,24 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  OnInit,
+  output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Category } from '../../../../../api/category.model';
 import { CategoryService } from '../../../../../api/category.service';
+import { AppButton } from '../../../../../shared/components/button/app-button';
 import { AppSearch } from '../../../../../shared/components/search/app-search';
 import { AppTag } from '../../../../../shared/components/tags/app-tag';
 
 @Component({
-  imports: [AppSearch, AppTag],
+  imports: [AppButton, AppSearch, AppTag],
   selector: 'app-filter-exploration',
   styleUrl: './filter-exploration.css',
   templateUrl: './filter-exploration.html',
@@ -16,16 +27,32 @@ export class FilterExploration implements OnInit {
   private readonly categoryService = inject(CategoryService);
   private readonly destroyRef = inject(DestroyRef);
 
+  @ViewChild('filterSection') private filterSection!: ElementRef<HTMLElement>;
+
   readonly categories = signal<Category[]>([]);
   readonly selectedCategoryIds = signal<number[]>([]);
   readonly selectedCategoryIdsChange = output<number[]>();
   readonly searchQuery = signal('');
+  readonly maxVisibleCategories = 7;
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly filteredCategories = computed(() => {
     const query = this.normalize(this.searchQuery().trim());
-    return this.categories().filter((category) => this.normalize(category.name).includes(query));
+    const selectedCategoryIds = new Set(this.selectedCategoryIds());
+
+    return this.categories()
+      .filter((category) => this.normalize(category.name).includes(query))
+      .sort(
+        (first, second) =>
+          Number(selectedCategoryIds.has(second.id)) - Number(selectedCategoryIds.has(first.id)),
+      );
   });
+  readonly showAllCategories = signal(false);
+  readonly visibleCategories = computed(() =>
+    this.showAllCategories()
+      ? this.filteredCategories()
+      : this.filteredCategories().slice(0, this.maxVisibleCategories),
+  );
 
   ngOnInit(): void {
     this.loadCategories();
@@ -59,6 +86,12 @@ export class FilterExploration implements OnInit {
 
     this.selectedCategoryIds.set(updatedIds);
     this.selectedCategoryIdsChange.emit(updatedIds);
+    this.showAllCategories.set(false);
+    this.filterSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  toggleCategories(): void {
+    this.showAllCategories.update((showAll) => !showAll);
   }
 
   private normalize(value: string): string {

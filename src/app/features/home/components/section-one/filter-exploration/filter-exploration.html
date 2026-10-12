@@ -1,4 +1,8 @@
-<section class="mx-auto max-w-7xl px-6 py-8" aria-labelledby="category-filters-title">
+<section
+  #filterSection
+  class="mx-auto max-w-7xl px-6 py-8"
+  aria-labelledby="category-filters-title"
+>
   <h2 id="category-filters-title" class="mb-4 text-2xl font-semibold text-stone-900">
     Explora por categoría
   </h2>
@@ -28,7 +32,7 @@
     <p class="text-stone-600">No hay categorías que coincidan con la búsqueda.</p>
   } @else {
     <div class="flex flex-wrap gap-3" id="category-tags">
-      @for (category of filteredCategories(); track category.id) {
+      @for (category of visibleCategories(); track category.id) {
         <app-tag
           [label]="category.name"
           [selected]="selectedCategoryIds().includes(category.id)"
@@ -36,5 +40,13 @@
         />
       }
     </div>
+    @if (filteredCategories().length > maxVisibleCategories) {
+      <app-button
+        class="mt-4"
+        [label]="showAllCategories() ? 'Ver menos' : 'Ver todas'"
+        variant="secondary"
+        (clicked)="toggleCategories()"
+      />
+    }
   }
 </section>
