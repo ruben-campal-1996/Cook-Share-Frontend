@@ -1,1 +1,85 @@
-<p>user-details works!</p>
+<main class="user-details">
+  @if (loading()) {
+    <p class="user-details__status" role="status">Cargando los detalles de tu cuenta...</p>
+  } @else if (loadError(); as errorMessage) {
+    <section class="user-details__message user-details__message--error" role="alert">
+      <p>{{ errorMessage }}</p>
+      <a routerLink="/login">Iniciar sesión</a>
+      <button type="button" (click)="loadProfile()">Reintentar</button>
+    </section>
+  } @else if (profile(); as currentProfile) {
+    <section class="user-details__card" aria-labelledby="user-details-title">
+      <h1 id="user-details-title">Detalles de cuenta</h1>
+      <div class="user-details__profile">
+        <img
+          class="user-details__avatar"
+          [src]="imagePreview() || '/images/avatar_defaultUrl.png'"
+          alt="Vista previa del avatar"
+          width="112"
+          height="112"
+        />
+        <div>
+          <p class="user-details__role">{{ currentProfile.nickname }}</p>
+        </div>
+      </div>
+
+      <form class="user-details__form" (ngSubmit)="saveProfile()">
+        <label for="nickname">Nombre de usuario</label>
+        <input
+          id="nickname"
+          name="nickname"
+          type="text"
+          autocomplete="nickname"
+          maxlength="60"
+          required
+          [ngModel]="nickname()"
+          (ngModelChange)="nickname.set($event)"
+        />
+
+        <label for="avatarUrl">URL del avatar</label>
+        <input
+          id="avatarUrl"
+          name="avatarUrl"
+          type="text"
+          maxlength="2048"
+          placeholder="/images/avatar_defaultUrl.png"
+          [ngModel]="avatarUrl()"
+          (ngModelChange)="avatarUrl.set($event)"
+        />
+
+        @if (saveError(); as message) {
+          <p class="user-details__message user-details__message--error" role="alert">
+            {{ message }}
+          </p>
+        }
+        @if (saveSuccess()) {
+          <p class="user-details__message user-details__message--success" role="status">
+            Los cambios se han guardado.
+          </p>
+        }
+
+        <button class="user-details__save" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+      </form>
+
+      <section class="user-details__danger-zone" aria-labelledby="deactivate-title">
+        <h2 id="deactivate-title">Desactivar cuenta</h2>
+        <p>Desactivar la cuenta cerrará tu sesión y ocultará tu perfil.</p>
+        @if (deleteError(); as message) {
+          <p class="user-details__message user-details__message--error" role="alert">
+            {{ message }}
+          </p>
+        }
+        <button
+          class="user-details__deactivate"
+          type="button"
+          [disabled]="deleting()"
+          (click)="deactivateAccount()"
+        >
+          {{ deleting() ? 'Desactivando...' : 'Desactivar cuenta' }}
+        </button>
+      </section>
+    </section>
+  }
+</main>
