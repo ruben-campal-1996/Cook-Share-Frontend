@@ -1,1 +1,17 @@
-<p>register works!</p>
+<main class="register-page">
+  <section class="register-page__content">
+    <app-auth-form
+      title="Crear cuenta"
+      [fields]="fields"
+      submitLabel="Registrarse"
+      (submitted)="onSubmit($event)"
+    />
+    @if (passwordMismatch()) {
+      <p class="register-page__error" role="alert">Las contraseñas no coinciden.</p>
+    }
+    <p class="register-page__login">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login">Inicia sesión</a>
+    </p>
+  </section>
+</main>
