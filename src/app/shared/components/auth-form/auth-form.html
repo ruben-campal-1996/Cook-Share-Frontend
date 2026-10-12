@@ -1,4 +1,10 @@
-<form #authForm class="auth-form" [attr.aria-label]="title()" (submit)="onSubmit($event, authForm)">
+<form
+  #authForm
+  class="auth-form"
+  [attr.aria-label]="title()"
+  [attr.aria-busy]="disabled()"
+  (submit)="onSubmit($event, authForm)"
+>
   <h1 class="auth-form__title">{{ title() }}</h1>
 
   <div class="auth-form__fields">
@@ -11,10 +17,11 @@
           [attr.placeholder]="field.placeholder ?? null"
           [attr.autocomplete]="field.autocomplete ?? null"
           [required]="field.required ?? false"
+          [disabled]="disabled()"
         />
       </label>
     }
   </div>
 
-  <app-button [label]="submitLabel()" type="submit" [fullWidth]="true" />
+  <app-button [label]="submitLabel()" type="submit" [fullWidth]="true" [disabled]="disabled()" />
 </form>

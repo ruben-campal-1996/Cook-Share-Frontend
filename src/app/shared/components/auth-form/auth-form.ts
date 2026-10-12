@@ -20,11 +20,15 @@ export class AuthForm {
   readonly title = input.required<string>();
   readonly fields = input.required<AuthFormField[]>();
   readonly submitLabel = input.required<string>();
+  readonly disabled = input(false);
 
   readonly submitted = output<Record<string, string>>();
 
   onSubmit(event: SubmitEvent, form: HTMLFormElement): void {
     event.preventDefault();
+    if (this.disabled()) {
+      return;
+    }
 
     const formData = new FormData(form);
     const values: Record<string, string> = {};
