@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from './recipe.model';
 
-const API_URL = 'http://localhost:8080/api/v1';
+const API_URL = '/api/v1';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {

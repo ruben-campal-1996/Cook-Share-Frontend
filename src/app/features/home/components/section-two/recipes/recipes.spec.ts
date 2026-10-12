@@ -47,7 +47,7 @@ describe('Recipes', () => {
   it('loads and renders recipes from the API', () => {
     fixture.detectChanges();
 
-    const request = httpTesting.expectOne('http://localhost:8080/api/v1/recipes');
+    const request = httpTesting.expectOne('/api/v1/recipes');
     expect(request.request.method).toBe('GET');
     request.flush([recipe]);
     fixture.detectChanges();
@@ -59,10 +59,19 @@ describe('Recipes', () => {
     );
   });
 
+  it('converts relative backend image paths to root-relative URLs', () => {
+    expect(component.resolveImageUrl('./images/avatar_defaultUrl.png')).toBe(
+      '/images/avatar_defaultUrl.png',
+    );
+    expect(component.resolveImageUrl('https://cdn.example.com/recipe.png')).toBe(
+      'https://cdn.example.com/recipe.png',
+    );
+  });
+
   it('shows an error and allows retrying when the API request fails', () => {
     fixture.detectChanges();
     httpTesting
-      .expectOne('http://localhost:8080/api/v1/recipes')
+      .expectOne('/api/v1/recipes')
       .flush('Service unavailable', { status: 500, statusText: 'Server Error' });
     fixture.detectChanges();
 
@@ -72,7 +81,7 @@ describe('Recipes', () => {
 
     fixture.nativeElement.querySelector('button').click();
     fixture.detectChanges();
-    httpTesting.expectOne('http://localhost:8080/api/v1/recipes').flush([recipe]);
+    httpTesting.expectOne('/api/v1/recipes').flush([recipe]);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Tortilla');

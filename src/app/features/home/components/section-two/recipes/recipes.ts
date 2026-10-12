@@ -19,6 +19,10 @@ export class Recipes implements OnInit {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
+  resolveImageUrl(imageUrl: string): string {
+    return imageUrl.startsWith('./') ? imageUrl.slice(1) : imageUrl;
+  }
+
   ngOnInit(): void {
     this.loadRecipes();
   }
