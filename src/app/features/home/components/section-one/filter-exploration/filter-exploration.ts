@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Category } from '../../../../../api/category.model';
 import { CategoryService } from '../../../../../api/category.service';
@@ -18,6 +18,7 @@ export class FilterExploration implements OnInit {
 
   readonly categories = signal<Category[]>([]);
   readonly selectedCategoryIds = signal<number[]>([]);
+  readonly selectedCategoryIdsChange = output<number[]>();
   readonly searchQuery = signal('');
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -49,11 +50,15 @@ export class FilterExploration implements OnInit {
   }
 
   setCategorySelected(categoryId: number, selected: boolean): void {
-    this.selectedCategoryIds.update((selectedIds) =>
-      selected
-        ? [...selectedIds, categoryId]
-        : selectedIds.filter((selectedId) => selectedId !== categoryId),
-    );
+    const selectedIds = this.selectedCategoryIds();
+    const updatedIds = selected
+      ? selectedIds.includes(categoryId)
+        ? selectedIds
+        : [...selectedIds, categoryId]
+      : selectedIds.filter((selectedId) => selectedId !== categoryId);
+
+    this.selectedCategoryIds.set(updatedIds);
+    this.selectedCategoryIdsChange.emit(updatedIds);
   }
 
   private normalize(value: string): string {

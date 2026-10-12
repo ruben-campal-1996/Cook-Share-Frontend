@@ -44,6 +44,7 @@ describe('FilterExploration', () => {
     buttons[0].click();
     fixture.detectChanges();
     expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
+    expect(component.selectedCategoryIds()).toEqual([1]);
   });
 
   it('filters category tags by search text, ignoring case and accents', () => {
