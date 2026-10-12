@@ -1,19 +1,43 @@
-<footer class="footer">
-  <section class="footer__brand" aria-labelledby="footer-brand-title">
-    <h2 class="footer__title" id="footer-brand-title">Cook&Share</h2>
-    <p>
+<footer
+  class="footer grid grid-cols-2 gap-[var(--spacing-2xl)] bg-[var(--color-primary-400)] px-[var(--spacing-lg)] py-[var(--spacing-2xl)] text-white max-[40rem]:grid-cols-1 max-[40rem]:gap-[var(--spacing-xl)]"
+>
+  <section class="footer__brand max-w-[32rem]" aria-labelledby="footer-brand-title">
+    <h2 class="footer__title m-0 mb-[var(--spacing-md)] text-[1.5rem]" id="footer-brand-title">
+      Cook&Share
+    </h2>
+    <p class="m-0 max-w-[36rem] leading-[1.6]">
       Comparte el amor por la cocina casera, descubre platos auténticos y planifica tus menús
       semanales.
     </p>
   </section>
 
-  <section class="footer__navigation" aria-labelledby="footer-navigation-title">
-    <h2 class="footer__heading" id="footer-navigation-title">Navegación</h2>
+  <section class="footer__navigation max-w-[32rem]" aria-labelledby="footer-navigation-title">
+    <h2 class="footer__heading m-0 mb-[var(--spacing-md)]" id="footer-navigation-title">
+      Navegación
+    </h2>
     <nav aria-label="Navegación del pie de página">
-      <ul class="footer__links">
-        <li><a routerLink="/">Inicio</a></li>
-        <li><a routerLink="/login">Iniciar sesión</a></li>
-        <li><a routerLink="/register">Registrarse</a></li>
+      <ul class="footer__links m-0 flex list-none flex-col gap-[var(--spacing-md)] p-0">
+        <li>
+          <a
+            class="text-inherit no-underline hover:underline focus-visible:rounded-[var(--spacing-5xs)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[var(--spacing-5xs)]"
+            routerLink="/"
+            >Inicio</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-inherit no-underline hover:underline focus-visible:rounded-[var(--spacing-5xs)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[var(--spacing-5xs)]"
+            routerLink="/login"
+            >Iniciar sesión</a
+          >
+        </li>
+        <li>
+          <a
+            class="text-inherit no-underline hover:underline focus-visible:rounded-[var(--spacing-5xs)] focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-[var(--spacing-5xs)]"
+            routerLink="/register"
+            >Registrarse</a
+          >
+        </li>
       </ul>
     </nav>
   </section>
