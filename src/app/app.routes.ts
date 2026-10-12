@@ -11,7 +11,7 @@ export const routes: Routes = [
       import('./features/recipe-details/recipe-details').then((c) => c.RecipeDetails),
   },
   {
-    path: 'user-details/:id',
+    path: 'user-details',
     loadComponent: () => import('./features/user-details/user-details').then((c) => c.UserDetails),
   },
   {
