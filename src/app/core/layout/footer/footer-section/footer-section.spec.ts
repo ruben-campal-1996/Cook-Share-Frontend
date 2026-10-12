@@ -18,4 +18,16 @@ describe('FooterSection', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render the brand message and navigation links', () => {
+    const footer = fixture.nativeElement as HTMLElement;
+
+    expect(footer.querySelector('h2')?.textContent).toContain('Cook&Share');
+    expect(footer.textContent).toContain(
+      'Comparte el amor por la cocina casera, descubre platos auténticos y planifica tus menús semanales.',
+    );
+    expect(
+      Array.from(footer.querySelectorAll('nav a')).map((link) => link.getAttribute('href')),
+    ).toEqual(['/', '/login', '/register']);
+  });
 });
