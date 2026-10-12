@@ -5,6 +5,7 @@ export interface Recipe {
   instructions: string;
   imageUrl: string | null;
   servings: number;
+  categoryIds: number[];
   authorId: number;
   statusId: number;
   totalCalories: number;
