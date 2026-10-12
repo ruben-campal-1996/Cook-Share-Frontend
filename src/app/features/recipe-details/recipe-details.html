@@ -1,1 +1,53 @@
-<p>recipe-details works!</p>
+<main class="mx-auto max-w-5xl px-6 py-10">
+  @if (loading()) {
+    <p class="py-16 text-center text-stone-600" role="status">Cargando receta...</p>
+  } @else if (error(); as errorMessage) {
+    <section class="rounded-lg bg-red-50 p-6 text-center text-red-800" role="alert">
+      <p>{{ errorMessage }}</p>
+      <button
+        class="mt-4 rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800"
+        type="button"
+        (click)="retryLoad()"
+      >
+        Reintentar
+      </button>
+    </section>
+  } @else if (recipe(); as recipe) {
+    <article>
+      <h1 class="mb-6 text-4xl font-bold text-stone-900">{{ recipe.name }}</h1>
+
+      @if (recipe.imageUrl) {
+        <img
+          class="mb-8 max-h-[32rem] w-full rounded-2xl object-cover"
+          [src]="resolveImageUrl(recipe.imageUrl)"
+          [alt]="recipe.name"
+        />
+      } @else {
+        <div
+          class="mb-8 flex h-72 items-center justify-center rounded-2xl bg-orange-50 text-orange-800"
+          aria-label="Esta receta no tiene imagen"
+        >
+          Sin imagen
+        </div>
+      }
+
+      <section class="mb-8" aria-labelledby="recipe-description-title">
+        <h2 id="recipe-description-title" class="mb-3 text-2xl font-semibold text-stone-900">
+          Descripción
+        </h2>
+        <p class="whitespace-pre-line leading-7 text-stone-700">{{ recipe.description }}</p>
+      </section>
+
+      <section aria-labelledby="recipe-instructions-title">
+        <h2 id="recipe-instructions-title" class="mb-3 text-2xl font-semibold text-stone-900">
+          Instrucciones
+        </h2>
+        <ol class="list-decimal space-y-3 pl-6 leading-7 text-stone-700">
+          @for (step of instructionSteps(); track $index) {
+            <li>{{ step }}</li>
+          }
+        </ol>
+      </section>
+    </article>
+  }
+</main>
