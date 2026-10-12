@@ -1,6 +1,17 @@
 <main class="login-page">
   <section class="login-page__content">
-    <app-auth-form title="Iniciar sesión" [fields]="fields" submitLabel="Entrar" />
+    <app-auth-form
+      title="Iniciar sesión"
+      [fields]="fields"
+      [submitLabel]="loading() ? 'Entrando...' : 'Entrar'"
+      [disabled]="loading()"
+      (submitted)="onSubmit($event)"
+    />
+    @if (error(); as errorMessage) {
+      <p class="mt-4 rounded-lg bg-red-50 p-4 text-center text-red-800" role="alert">
+        {{ errorMessage }}
+      </p>
+    }
     <p class="login-page__register">
       ¿No tienes cuenta?
       <a routerLink="/register">Regístrate</a>
