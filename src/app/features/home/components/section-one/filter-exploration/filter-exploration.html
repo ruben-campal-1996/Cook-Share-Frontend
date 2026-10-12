@@ -42,7 +42,7 @@
     </div>
     @if (filteredCategories().length > maxVisibleCategories) {
       <app-button
-        class="mt-4"
+        class="mt-3 block"
         [label]="showAllCategories() ? 'Ver menos' : 'Ver todas'"
         variant="secondary"
         (clicked)="toggleCategories()"

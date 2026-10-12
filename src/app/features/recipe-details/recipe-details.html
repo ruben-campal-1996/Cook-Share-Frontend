@@ -31,6 +31,25 @@
         </div>
       }
 
+      @if (recipeCategories().length > 0) {
+        <section class="mb-8" aria-labelledby="recipe-categories-title">
+          <h2 id="recipe-categories-title" class="mb-3 text-2xl font-semibold text-stone-900">
+            Categorías
+          </h2>
+          <div class="flex flex-wrap gap-3">
+            @for (category of recipeCategories(); track category.id) {
+              <span
+                class="rounded-full border border-[var(--color-primary-500)] bg-transparent px-[var(--spacing-md)] py-[var(--spacing-2xs)] text-sm font-medium text-[var(--color-primary-500)]"
+              >
+                #{{ category.name }}
+              </span>
+            }
+          </div>
+        </section>
+      } @else if (categoriesError(); as categoriesErrorMessage) {
+        <p class="mb-8 text-red-800" role="alert">{{ categoriesErrorMessage }}</p>
+      }
+
       <section class="mb-8" aria-labelledby="recipe-description-title">
         <h2 id="recipe-description-title" class="mb-3 text-2xl font-semibold text-stone-900">
           Descripción

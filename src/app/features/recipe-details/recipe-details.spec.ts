@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { Category } from '../../api/category.model';
 import { Recipe } from '../../api/recipe.model';
 import { RecipeDetails } from './recipe-details';
 
@@ -61,9 +62,13 @@ describe('RecipeDetails', () => {
     const request = httpTesting.expectOne('/api/v1/recipes/7');
     expect(request.request.method).toBe('GET');
     request.flush(recipe);
+    httpTesting
+      .expectOne('/api/v1/categories')
+      .flush([{ id: 1, name: 'Comida casera' }] satisfies Category[]);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain('Tortilla');
+    expect(fixture.nativeElement.textContent).toContain('#Comida casera');
     expect(fixture.nativeElement.querySelector('img')?.getAttribute('src')).toBe(
       '/images/tortilla.png',
     );
@@ -86,6 +91,7 @@ describe('RecipeDetails', () => {
     fixture.nativeElement.querySelector('button').click();
     fixture.detectChanges();
     httpTesting.expectOne('/api/v1/recipes/7').flush(recipe);
+    httpTesting.expectOne('/api/v1/categories').flush([{ id: 1, name: 'Comida casera' }]);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain('Tortilla');
