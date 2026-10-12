@@ -26,3 +26,61 @@
   outline: 2px solid var(--color-primary-500);
   outline-offset: var(--spacing-4xs);
 }
+
+.header__user {
+  position: relative;
+}
+
+.header__user-toggle {
+  display: flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.header__user-toggle:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 3px;
+}
+
+.header__avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header__menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + var(--spacing-sm));
+  right: 0;
+  min-width: 13rem;
+  overflow: hidden;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--spacing-sm);
+  background: white;
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 12%);
+}
+
+.header__menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 0;
+  background: white;
+  color: var(--color-neutral-700);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header__menu-item:hover,
+.header__menu-item:focus-visible {
+  background: var(--color-primary-50);
+  color: var(--color-primary-700);
+  outline: none;
+}

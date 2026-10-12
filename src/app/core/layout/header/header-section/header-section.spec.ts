@@ -1,20 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { HeaderSection } from './header-section';
 
 describe('HeaderSection', () => {
   let component: HeaderSection;
   let fixture: ComponentFixture<HeaderSection>;
+  let httpTesting: HttpTestingController;
 
   beforeEach(async () => {
+    sessionStorage.removeItem('auth_token');
     await TestBed.configureTestingModule({
       imports: [HeaderSection],
-      providers: [provideRouter([])],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderSection);
     component = fixture.componentInstance;
+    httpTesting = TestBed.inject(HttpTestingController);
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    httpTesting.verify();
+    sessionStorage.removeItem('auth_token');
   });
 
   it('should create', () => {
@@ -32,5 +42,34 @@ describe('HeaderSection', () => {
     expect(homeLink?.getAttribute('href')).toBe('/');
     expect(loginLink?.textContent?.trim()).toBe('Iniciar sesión');
     expect(loginLink?.getAttribute('href')).toBe('/login');
+  });
+
+  it('shows the account menu for an authenticated user and logs out', () => {
+    component.authService.login('user@example.com', 'secret').subscribe();
+    httpTesting.expectOne('/api/v1/auth/token').flush({ token: 'signed-jwt' });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.header__login')).toBeNull();
+    const userButton: HTMLButtonElement | null =
+      fixture.nativeElement.querySelector('.header__user-toggle');
+    expect(userButton?.querySelector('img')?.getAttribute('src')).toBe(
+      '/images/avatar_defaultUrl.png',
+    );
+
+    userButton?.click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Detalles de cuenta');
+    expect(fixture.nativeElement.textContent).toContain('Desconectarse');
+    expect(
+      fixture.nativeElement.querySelector('.header__menu-item[routerLink]')?.getAttribute('href'),
+    ).toBe('/user-details');
+
+    fixture.nativeElement.querySelectorAll('.header__menu-item')[1].click();
+    fixture.detectChanges();
+    expect(component.authService.isAuthenticated()).toBe(false);
+    expect(fixture.nativeElement.querySelector('.header__login')?.textContent).toContain(
+      'Iniciar sesión',
+    );
+    expect(fixture.nativeElement.querySelector('.header__menu')).toBeNull();
   });
 });
