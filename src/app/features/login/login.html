@@ -1,1 +1,9 @@
-<p>login works!</p>
+<main class="login-page">
+  <section class="login-page__content">
+    <app-auth-form title="Iniciar sesión" [fields]="fields" submitLabel="Entrar" />
+    <p class="login-page__register">
+      ¿No tienes cuenta?
+      <a routerLink="/register">Regístrate</a>
+    </p>
+  </section>
+</main>
