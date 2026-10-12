@@ -17,7 +17,7 @@ describe('AppTag', () => {
   it('renders its label as an unselected button', () => {
     const button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
 
-    expect(button.textContent?.trim()).toBe('Vegetariano');
+    expect(button.textContent?.trim()).toBe('#Vegetariano');
     expect(button.getAttribute('aria-pressed')).toBe('false');
   });
 
