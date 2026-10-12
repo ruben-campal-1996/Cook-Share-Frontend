@@ -1,1 +1,54 @@
-<p>recipes works!</p>
+<section class="mx-auto max-w-7xl px-6 py-12" aria-labelledby="recipes-title">
+  <div class="mb-8">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-widest text-orange-700">
+      Cook &amp; Share
+    </p>
+    <h1 id="recipes-title" class="text-3xl font-bold text-stone-900">Explora recetas</h1>
+    <p class="mt-2 text-stone-600">Descubre algo delicioso para cocinar y compartir.</p>
+  </div>
+
+  @if (loading()) {
+    <p class="py-10 text-center text-stone-600" role="status">Cargando recetas...</p>
+  } @else if (error(); as errorMessage) {
+    <div class="rounded-lg bg-red-50 p-6 text-center text-red-800" role="alert">
+      <p>{{ errorMessage }}</p>
+      <button
+        class="mt-4 rounded-md bg-red-700 px-4 py-2 font-semibold text-white hover:bg-red-800"
+        type="button"
+        (click)="loadRecipes()"
+      >
+        Reintentar
+      </button>
+    </div>
+  } @else if (recipes().length === 0) {
+    <p class="py-10 text-center text-stone-600">Todavía no hay recetas para mostrar.</p>
+  } @else {
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      @for (recipe of recipes(); track recipe.id) {
+        <a
+          class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          [routerLink]="['/recipe-details', recipe.id]"
+        >
+          @if (recipe.imageUrl) {
+            <img class="h-52 w-full object-cover" [src]="recipe.imageUrl" [alt]="recipe.name" />
+          } @else {
+            <div
+              class="flex h-52 items-center justify-center bg-orange-50 text-orange-800"
+              aria-hidden="true"
+            >
+              Sin imagen
+            </div>
+          }
+          <div class="p-5">
+            <h2 class="text-xl font-semibold text-stone-900">{{ recipe.name }}</h2>
+            <p class="mt-2 line-clamp-3 text-sm text-stone-600">{{ recipe.description }}</p>
+            <div class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm text-stone-500">
+              <span>{{ recipe.servings }} raciones</span>
+              <span>{{ recipe.caloriesPerServing }} kcal/ración</span>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>
