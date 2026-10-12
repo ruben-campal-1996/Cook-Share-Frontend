@@ -1,0 +1,19 @@
+<span class="inline-block" [class.w-full]="fullWidth()">
+  <button
+    class="inline-flex min-h-12 items-center justify-center rounded-lg border px-[var(--spacing-md)] py-[var(--spacing-xs)] [font:inherit] text-center font-semibold cursor-pointer transition-[background-color,border-color,color,box-shadow] duration-150 ease-[ease] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-900)] enabled:active:translate-y-px disabled:cursor-not-allowed disabled:opacity-[0.55] motion-reduce:transition-none"
+    [ngClass]="{
+      'border-transparent bg-[var(--button-background,var(--color-primary-500))] text-[var(--button-color,white)] enabled:hover:bg-[var(--button-hover-background,var(--color-primary-700))]':
+        variant() === 'primary',
+      'border-transparent bg-[var(--button-background,var(--color-secondary-600))] text-[var(--button-color,white)] enabled:hover:bg-[var(--button-hover-background,var(--color-secondary-700))]':
+        variant() === 'secondary',
+      'border-[var(--button-border-color,var(--color-primary-500))] bg-transparent text-[var(--button-color,var(--color-primary-700))] enabled:hover:bg-[var(--button-hover-background,var(--color-primary-50))]':
+        variant() === 'transparent',
+      'w-full': fullWidth(),
+    }"
+    [type]="type()"
+    [disabled]="disabled()"
+    (click)="clicked.emit($event)"
+  >
+    {{ label() }}
+  </button>
+</span>
