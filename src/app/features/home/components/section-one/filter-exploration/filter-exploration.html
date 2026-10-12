@@ -2,6 +2,12 @@
   <h2 id="category-filters-title" class="mb-4 text-2xl font-semibold text-stone-900">
     Explora por categoría
   </h2>
+  <app-search
+    class="mb-5 block"
+    [query]="searchQuery()"
+    placeholder="Buscar categorías..."
+    (queryChange)="searchQuery.set($event)"
+  />
 
   @if (loading()) {
     <p class="text-stone-600" role="status">Cargando categorías...</p>
@@ -18,9 +24,11 @@
     </div>
   } @else if (categories().length === 0) {
     <p class="text-stone-600">No hay categorías disponibles.</p>
+  } @else if (filteredCategories().length === 0) {
+    <p class="text-stone-600">No hay categorías que coincidan con la búsqueda.</p>
   } @else {
-    <div class="flex flex-wrap gap-3">
-      @for (category of categories(); track category.id) {
+    <div class="flex flex-wrap gap-3" id="category-tags">
+      @for (category of filteredCategories(); track category.id) {
         <app-tag
           [label]="category.name"
           [selected]="selectedCategoryIds().includes(category.id)"

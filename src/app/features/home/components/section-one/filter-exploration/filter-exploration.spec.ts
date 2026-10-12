@@ -38,12 +38,46 @@ describe('FilterExploration', () => {
     const buttons: NodeListOf<HTMLButtonElement> =
       fixture.nativeElement.querySelectorAll('app-tag button');
     expect(buttons.length).toBe(2);
-    expect(buttons[0].textContent?.trim()).toBe('Vegetariano');
+    expect(buttons[0].textContent?.trim()).toBe('#Vegetariano');
     expect(buttons[0].getAttribute('aria-pressed')).toBe('false');
 
     buttons[0].click();
     fixture.detectChanges();
     expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('filters category tags by search text, ignoring case and accents', () => {
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/categories').flush([
+      { id: 1, name: 'Desayunos' },
+      { id: 2, name: 'Postres' },
+      { id: 3, name: 'Bebidas' },
+    ]);
+    fixture.detectChanges();
+
+    const searchInput: HTMLInputElement = fixture.nativeElement.querySelector('app-search input');
+    searchInput.value = 'POSTRES';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const buttons: NodeListOf<HTMLButtonElement> =
+      fixture.nativeElement.querySelectorAll('app-tag button');
+    expect(buttons.length).toBe(1);
+    expect(buttons[0].textContent?.trim()).toBe('#Postres');
+
+    searchInput.value = 'bebída';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('app-tag button')?.textContent?.trim(),
+    ).toBe('#Bebidas');
+
+    searchInput.value = 'no existe';
+    searchInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain(
+      'No hay categorías que coincidan con la búsqueda.',
+    );
   });
 
   it('shows a retry action if categories cannot be loaded', () => {
