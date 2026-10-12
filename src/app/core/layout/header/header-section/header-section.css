@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: white;
+}
+
+.header__logo {
+  width: 3rem;
+  height: 3rem;
+}
+
+.header__login {
+  color: var(--color-primary-700);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.header__login:hover {
+  color: var(--color-secondary-700);
+}
+
+.header__login:focus-visible {
+  border-radius: var(--spacing-4xs);
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: var(--spacing-4xs);
+}
