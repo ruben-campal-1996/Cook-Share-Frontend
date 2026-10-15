@@ -75,6 +75,7 @@
 .user-details__deactivate,
 .user-details__message button {
   min-height: 2.75rem;
+  margin-top: 1rem;
   padding: var(--spacing-sm) var(--spacing-md);
   border: 0;
   border-radius: var(--spacing-xs);
@@ -93,19 +94,23 @@
   background: var(--color-primary-700);
 }
 
-.user-details__danger-zone {
+.user-details__deactivate-account {
   margin-top: var(--spacing-2xl);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--color-neutral-200);
 }
 
-.user-details__danger-zone h2 {
+.user-details__deactivate-account h2 {
   margin: 0 0 var(--spacing-xs);
   color: var(--color-neutral-900);
   font-size: 1.2rem;
 }
 
-.user-details__danger-zone > p {
+.h2-fav {
+  font-size: var(--font-size-large);
+}
+
+.user-details__deactivate-account > p {
   color: var(--color-neutral-600);
 }
 

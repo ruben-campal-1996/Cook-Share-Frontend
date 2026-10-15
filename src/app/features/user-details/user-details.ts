@@ -6,9 +6,10 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../api/auth.service';
 import { UserDetailsService } from '../../api/user-details.service';
 import { UserProfile } from '../../api/user-details.model';
+import { AppButton } from '../../shared/components/button/app-button';
 
 @Component({
-  imports: [FormsModule, RouterLink],
+  imports: [AppButton, FormsModule, RouterLink],
   selector: 'app-user-details',
   styleUrl: './user-details.css',
   templateUrl: './user-details.html',

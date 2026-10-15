@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'transparent';
+export type ButtonVariant = 'primary' | 'secondary' | 'transparent' | 'green' | 'red' | 'yellow';
 export type ButtonType = 'button' | 'submit' | 'reset';
 
 @Component({
