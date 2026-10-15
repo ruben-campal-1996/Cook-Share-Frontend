@@ -63,7 +63,17 @@
         </button>
       </form>
 
-      <section class="user-details__danger-zone" aria-labelledby="deactivate-title">
+      <section class="user-details-favourites" aria-labelledby="deactivate-title">
+        <h2 id="deactivate-title" class="h2-fav">Mis recetas</h2>
+        <p>Revisa tus recetas publicadas y favoritos</p>
+        @if (deleteError(); as message) {
+          <p class="user-details__message user-details__message--error" role="alert">
+            {{ message }}
+          </p>
+        }
+        <app-button label="Mis Recetas" variant="secondary" type="button"> </app-button>
+      </section>
+      <section class="user-details__deactivate-account" aria-labelledby="deactivate-title">
         <h2 id="deactivate-title">Desactivar cuenta</h2>
         <p>Desactivar la cuenta cerrará tu sesión y ocultará tu perfil.</p>
         @if (deleteError(); as message) {

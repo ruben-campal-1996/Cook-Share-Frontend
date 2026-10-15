@@ -18,13 +18,7 @@
   } @else if (error(); as errorMessage) {
     <div class="flex flex-wrap items-center gap-3" role="alert">
       <p class="text-red-800">{{ errorMessage }}</p>
-      <button
-        class="rounded-md border border-[var(--color-primary-500)] px-[var(--spacing-sm)] py-[var(--spacing-2xs)] text-[var(--color-primary-500)] hover:bg-[var(--color-primary-50)]"
-        type="button"
-        (click)="loadCategories()"
-      >
-        Reintentar
-      </button>
+      <app-button label="Reintentar" variant="transparent" (clicked)="loadCategories()" />
     </div>
   } @else if (categories().length === 0) {
     <p class="text-stone-600">No hay categorías disponibles.</p>
