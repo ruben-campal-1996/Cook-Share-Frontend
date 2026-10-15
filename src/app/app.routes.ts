@@ -22,4 +22,9 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./features/register/register').then((c) => c.Register),
   },
+  {
+    path: 'favourites',
+    loadComponent: () =>
+      import('./features/favourites/favourites-page/favourites-page').then((c) => c.FavouritesPage),
+  },
 ];
