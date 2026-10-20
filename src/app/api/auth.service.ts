@@ -26,6 +26,14 @@ export class AuthService {
     );
   }
 
+  changePassword(email: string, currentPassword: string, newPassword: string): Observable<void> {
+    return this.http.post<void>(`${API_URL}/change-password`, {
+      email,
+      currentPassword,
+      newPassword,
+    });
+  }
+
   getToken(): string | null {
     return this.token();
   }

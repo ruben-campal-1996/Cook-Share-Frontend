@@ -2,7 +2,7 @@
   <section class="login-page__content">
     <app-auth-form
       title="Iniciar sesión"
-      [fields]="fields"
+      [fields]="fields()"
       [submitLabel]="loading() ? 'Entrando...' : 'Entrar'"
       [disabled]="loading()"
       (submitted)="onSubmit($event)"

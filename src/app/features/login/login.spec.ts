@@ -70,10 +70,57 @@ describe('Login', () => {
     expect(component.error()).toBe('Correo electrónico o contraseña incorrectos.');
   });
 
-  it('shows when the backend requires a password change', () => {
+  it('shows the new password fields when the backend requires a password change', () => {
     component.onSubmit({ email: 'user@example.com', password: 'temporary' });
     httpTesting.expectOne('/api/v1/auth/token').flush({}, { status: 409, statusText: 'Conflict' });
 
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelector('[name="newPassword"]')).not.toBeNull();
+    expect(element.querySelector('[name="confirmPassword"]')).not.toBeNull();
     expect(component.error()).toBe('Debes cambiar tu contraseña antes de iniciar sesión.');
+  });
+
+  it('does not change the password when the confirmation does not match', () => {
+    component.requiresPasswordChange.set(true);
+
+    component.onSubmit({
+      email: 'user@example.com',
+      password: 'temporary',
+      newPassword: 'new-secret',
+      confirmPassword: 'different-secret',
+    });
+
+    httpTesting.expectNone('/api/v1/auth/change-password');
+    expect(component.error()).toBe('Las contraseñas no coinciden.');
+  });
+
+  it('changes the password and logs in with the new password', () => {
+    component.requiresPasswordChange.set(true);
+
+    component.onSubmit({
+      email: 'user@example.com',
+      password: 'temporary',
+      newPassword: 'new-secret',
+      confirmPassword: 'new-secret',
+    });
+
+    const changeRequest = httpTesting.expectOne('/api/v1/auth/change-password');
+    expect(changeRequest.request.method).toBe('POST');
+    expect(changeRequest.request.body).toEqual({
+      email: 'user@example.com',
+      currentPassword: 'temporary',
+      newPassword: 'new-secret',
+    });
+    changeRequest.flush({});
+
+    const loginRequest = httpTesting.expectOne('/api/v1/auth/token');
+    expect(loginRequest.request.body).toEqual({
+      email: 'user@example.com',
+      password: 'new-secret',
+    });
+    loginRequest.flush({ token: 'signed-jwt' });
+
+    expect(sessionStorage.getItem('auth_token')).toBe('signed-jwt');
   });
 });
