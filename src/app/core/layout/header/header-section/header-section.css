@@ -32,6 +32,14 @@
 
 .header__user {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.header__nickname {
+  color: var(--color-neutral-700);
+  font-weight: 600;
 }
 
 .header__user-toggle {

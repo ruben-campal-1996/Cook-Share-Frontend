@@ -49,7 +49,20 @@ describe('HeaderSection', () => {
     httpTesting.expectOne('/api/v1/auth/token').flush({ token: 'signed-jwt' });
     fixture.detectChanges();
 
+    httpTesting.expectOne('/api/v1/user-details').flush({
+      userId: 1,
+      nickname: 'cocinero',
+      avatarUrl: null,
+      roleId: 1,
+      roleName: 'USER',
+      updatedAt: '2026-01-01T00:00:00Z',
+    });
+    fixture.detectChanges();
+
     expect(fixture.nativeElement.querySelector('.header__login')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.header__nickname')?.textContent?.trim()).toBe(
+      'cocinero',
+    );
     const userButton: HTMLButtonElement | null =
       fixture.nativeElement.querySelector('.header__user-toggle');
     expect(userButton?.querySelector('img')?.getAttribute('src')).toBe(

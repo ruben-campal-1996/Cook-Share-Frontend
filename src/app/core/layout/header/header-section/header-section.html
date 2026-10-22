@@ -4,6 +4,7 @@
   </a>
   @if (authService.isAuthenticated()) {
     <div class="header__user">
+      <span class="header__nickname">{{ nickname() }}</span>
       <button
         class="header__user-toggle"
         type="button"
