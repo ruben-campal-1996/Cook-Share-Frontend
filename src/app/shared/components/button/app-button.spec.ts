@@ -21,7 +21,7 @@ describe('AppButton', () => {
 
     expect(button.textContent).toContain('Guardar receta');
     expect(button.type).toBe('button');
-    expect(button.classList).toContain('bg-[var(--button-background,var(--color-primary-500))]');
+    expect(button.classList).toContain('bg-(--button-background,var(--color-primary-500))');
   });
 
   it('applies parent-configured type, variant, and full width', () => {
@@ -33,9 +33,7 @@ describe('AppButton', () => {
     const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
     expect(button.type).toBe('submit');
-    expect(button.classList).toContain(
-      'border-[var(--button-border-color,var(--color-primary-500))]',
-    );
+    expect(button.classList).toContain('border-(--button-border-color,var(--color-primary-500))');
     expect(button.classList).toContain('w-full');
   });
 
@@ -45,9 +43,9 @@ describe('AppButton', () => {
 
     const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
-    expect(button.classList).toContain('bg-[var(--button-background,var(--color-secondary-600))]');
+    expect(button.classList).toContain('bg-(--button-background,var(--color-secondary-600))');
     expect(button.classList).toContain(
-      'enabled:hover:bg-[var(--button-hover-background,var(--color-secondary-700))]',
+      'enabled:hover:bg-(--button-hover-background,var(--color-secondary-700))',
     );
   });
 
