@@ -3,11 +3,21 @@
     <app-auth-form
       title="Crear cuenta"
       [fields]="fields"
-      submitLabel="Registrarse"
+      [submitLabel]="loading() ? 'Creando cuenta...' : 'Registrarse'"
+      [disabled]="loading() || registered()"
       (submitted)="onSubmit($event)"
     />
     @if (passwordMismatch()) {
       <p class="register-page__error" role="alert">Las contraseñas no coinciden.</p>
+    }
+    @if (error(); as errorMessage) {
+      <p class="register-page__error" role="alert">{{ errorMessage }}</p>
+    }
+    @if (registered()) {
+      <p class="register-page__success" role="status">
+        Cuenta creada correctamente. Ya puedes
+        <a routerLink="/login">iniciar sesión</a>.
+      </p>
     }
     <p class="register-page__login">
       ¿Ya tienes cuenta?
