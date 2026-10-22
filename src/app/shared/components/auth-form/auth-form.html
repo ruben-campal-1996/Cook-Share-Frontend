@@ -17,6 +17,8 @@
           [attr.placeholder]="field.placeholder ?? null"
           [attr.autocomplete]="field.autocomplete ?? null"
           [required]="field.required ?? false"
+          [attr.minlength]="field.minLength ?? null"
+          [attr.maxlength]="field.maxLength ?? null"
           [disabled]="disabled()"
         />
       </label>

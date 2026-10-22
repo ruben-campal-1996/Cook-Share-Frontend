@@ -8,6 +8,8 @@ export interface AuthFormField {
   placeholder?: string;
   autocomplete?: string;
   required?: boolean;
+  minLength?: number;
+  maxLength?: number;
 }
 
 @Component({
