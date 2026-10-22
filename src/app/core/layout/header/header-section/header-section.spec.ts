@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
+import { routes } from '../../../../app.routes';
 import { HeaderSection } from './header-section';
 
 describe('HeaderSection', () => {
@@ -13,7 +14,7 @@ describe('HeaderSection', () => {
     sessionStorage.removeItem('auth_token');
     await TestBed.configureTestingModule({
       imports: [HeaderSection],
-      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter(routes)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderSection);
@@ -84,5 +85,27 @@ describe('HeaderSection', () => {
       'Iniciar sesión',
     );
     expect(fixture.nativeElement.querySelector('.header__menu')).toBeNull();
+  });
+
+  it('navigates to the account details route when selected', async () => {
+    component.authService.login('user@example.com', 'secret').subscribe();
+    httpTesting.expectOne('/api/v1/auth/token').flush({ token: 'signed-jwt' });
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/user-details').flush({
+      userId: 1,
+      nickname: 'cocinero',
+      avatarUrl: null,
+      roleId: 1,
+      roleName: 'USER',
+      updatedAt: '2026-01-01T00:00:00Z',
+    });
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('.header__user-toggle').click();
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('.header__menu-item[routerLink]').click();
+    await fixture.whenStable();
+
+    expect(TestBed.inject(Router).url).toBe('/user-details');
   });
 });
