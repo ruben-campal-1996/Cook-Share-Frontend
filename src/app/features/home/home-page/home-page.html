@@ -1,4 +1,2 @@
-<main class="block min-h-screen bg-[var(--color-primary-300)]">
-  <app-filter-exploration (selectedCategoryIdsChange)="selectedCategoryIds.set($event)" />
-  <app-recipes [selectedCategoryIds]="selectedCategoryIds()" />
-</main>
+<app-filter-exploration (selectedCategoryIdsChange)="selectedCategoryIds.set($event)" />
+<app-recipes [selectedCategoryIds]="selectedCategoryIds()" />
