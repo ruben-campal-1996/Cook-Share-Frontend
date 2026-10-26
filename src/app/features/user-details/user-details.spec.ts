@@ -78,6 +78,34 @@ describe('UserDetails', () => {
     expect(fixture.nativeElement.textContent).toContain('Los cambios se han guardado.');
   });
 
+  it('uploads a selected avatar and saves the returned URL with the profile', async () => {
+    const file = new File(['image'], 'avatar.png', { type: 'image/png' });
+    component.onAvatarSelected(file);
+
+    const uploadRequest = httpTesting.expectOne('/api/v1/user-details/avatar');
+    expect(uploadRequest.request.method).toBe('POST');
+    expect(uploadRequest.request.body).toBeInstanceOf(FormData);
+    expect((uploadRequest.request.body as FormData).get('file')).toBe(file);
+    uploadRequest.flush({ avatarUrl: '/images/uploaded-avatar.png' });
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(component.avatarUrl()).toBe('/images/uploaded-avatar.png');
+    expect(fixture.nativeElement.querySelector('#avatarUrl').value).toBe(
+      '/images/uploaded-avatar.png',
+    );
+    expect(fixture.nativeElement.querySelector('.user-details__avatar').getAttribute('src')).toBe(
+      '/images/uploaded-avatar.png',
+    );
+
+    component.saveProfile();
+    const updateRequest = httpTesting.expectOne('/api/v1/user-details');
+    expect(updateRequest.request.method).toBe('PUT');
+    expect(updateRequest.request.body.avatarUrl).toBe('/images/uploaded-avatar.png');
+    updateRequest.flush({ ...profile, avatarUrl: '/images/uploaded-avatar.png' });
+  });
+
   it('requests account deactivation after confirmation and clears the session', () => {
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
     const router = TestBed.inject(Router);

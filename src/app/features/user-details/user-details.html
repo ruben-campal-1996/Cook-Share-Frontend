@@ -57,13 +57,16 @@
             Los cambios se han guardado.
           </p>
         }
+        @if (uploadingAvatar()) {
+          <p role="status">Subiendo imagen...</p>
+        }
 
         <div>
           <app-button
             class="user-details__save"
             label="Guardar Cambios"
             type="submit"
-            [disabled]="saving()"
+            [disabled]="saving() || uploadingAvatar()"
           >
             {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
           </app-button>
@@ -72,6 +75,8 @@
             label="Cargar imagen"
             type="file"
             variant="secondary"
+            [disabled]="uploadingAvatar() || saving()"
+            (fileSelected)="onAvatarSelected($event)"
           ></app-button>
         </div>
       </form>

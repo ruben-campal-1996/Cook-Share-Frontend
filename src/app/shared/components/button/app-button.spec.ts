@@ -43,9 +43,9 @@ describe('AppButton', () => {
 
     const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
 
-    expect(button.classList).toContain('bg-(--button-background,var(--color-secondary-600))');
+    expect(button.classList).toContain('bg-(--button-background,var(--color-secondary-500))');
     expect(button.classList).toContain(
-      'enabled:hover:bg-(--button-hover-background,var(--color-secondary-700))',
+      'enabled:hover:bg-(--button-hover-background,var(--color-secondary-600))',
     );
   });
 

@@ -23,6 +23,7 @@ export class UserDetails implements OnInit {
   readonly profile = signal<UserProfile | null>(null);
   readonly loading = signal(true);
   readonly saving = signal(false);
+  readonly uploadingAvatar = signal(false);
   readonly deleting = signal(false);
   readonly loadError = signal<string | null>(null);
   readonly saveError = signal<string | null>(null);
@@ -54,6 +55,7 @@ export class UserDetails implements OnInit {
           this.profile.set(profile);
           this.nickname.set(profile.nickname);
           this.avatarUrl.set(profile.avatarUrl ?? '');
+          this.userDetailsService.setAvatarUrl(profile.avatarUrl);
         },
         error: (error: HttpErrorResponse) => {
           console.error('Failed to load user details', error);
@@ -72,6 +74,10 @@ export class UserDetails implements OnInit {
   }
 
   saveProfile(): void {
+    if (this.uploadingAvatar()) {
+      return;
+    }
+
     const nickname = this.nickname().trim();
     if (!nickname) {
       this.saveError.set('El nombre de usuario es obligatorio.');
@@ -93,6 +99,7 @@ export class UserDetails implements OnInit {
           this.profile.set(profile);
           this.nickname.set(profile.nickname);
           this.avatarUrl.set(profile.avatarUrl ?? '');
+          this.userDetailsService.setAvatarUrl(profile.avatarUrl);
           this.saveSuccess.set(true);
         },
         error: (error: HttpErrorResponse) => {
@@ -110,6 +117,41 @@ export class UserDetails implements OnInit {
           this.saving.set(false);
         },
         complete: () => this.saving.set(false),
+      });
+  }
+
+  onAvatarSelected(file: File): void {
+    if (this.saving()) {
+      return;
+    }
+
+    this.uploadingAvatar.set(true);
+    this.saveError.set(null);
+    this.saveSuccess.set(false);
+
+    this.userDetailsService
+      .uploadAvatar(file)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ avatarUrl }) => {
+          this.avatarUrl.set(avatarUrl);
+          this.userDetailsService.setAvatarUrl(avatarUrl);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Failed to upload avatar', error);
+          if (error.status === 401) {
+            this.authService.logout();
+          }
+          this.saveError.set(
+            error.status === 400 || error.status === 413
+              ? 'La imagen debe ser JPG, JPEG o PNG y no superar 5 MB.'
+              : error.status === 401
+                ? 'Tu sesión ha caducado. Inicia sesión de nuevo.'
+                : 'No se ha podido subir la imagen. Inténtalo de nuevo.',
+          );
+          this.uploadingAvatar.set(false);
+        },
+        complete: () => this.uploadingAvatar.set(false),
       });
   }
 
