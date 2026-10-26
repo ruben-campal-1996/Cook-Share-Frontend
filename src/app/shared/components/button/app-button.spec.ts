@@ -64,4 +64,24 @@ describe('AppButton', () => {
 
     expect(clicked).toHaveBeenCalledOnce();
   });
+
+  it('opens an image file picker and emits the selected file', () => {
+    fixture.componentRef.setInput('type', 'file');
+    fixture.detectChanges();
+
+    const fileInput = fixture.nativeElement.querySelector('input[type="file"]') as HTMLInputElement;
+    const pickerClick = vi.spyOn(fileInput, 'click');
+    const file = new File(['image'], 'avatar.jpg', { type: 'image/jpeg' });
+    const fileSelected = vi.fn();
+    component.fileSelected.subscribe(fileSelected);
+
+    fixture.nativeElement.querySelector('button').click();
+    Object.defineProperty(fileInput, 'files', { configurable: true, value: [file] });
+    fileInput.dispatchEvent(new Event('change'));
+
+    expect(pickerClick).toHaveBeenCalledOnce();
+    expect(fileInput.accept).toBe('.jpg,.jpeg,.png,image/jpeg,image/png');
+    expect(fileSelected).toHaveBeenCalledWith(file);
+    expect(fileInput.value).toBe('');
+  });
 });

@@ -4,11 +4,11 @@
     [ngClass]="{
       'border-transparent bg-(--button-background,var(--color-primary-500)) text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-primary-700))':
         variant() === 'primary',
-      'border-transparent bg-(--button-background,var(--color-secondary-600)) text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-secondary-700))':
+      'border-transparent bg-(--button-background,var(--color-secondary-500)) text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-secondary-600))':
         variant() === 'secondary',
       'border-transparent bg-green-600 text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-secondary-700))':
         variant() === 'green',
-      'border-transparent bg-red-600 text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-secondary-700))':
+      'border-transparent bg-red-500 text-(--button-color,white) enabled:hover:bg-(--button-hover-background,)':
         variant() === 'red',
       'border-transparent bg-yellow-500 text-(--button-color,white) enabled:hover:bg-(--button-hover-background,var(--color-secondary-500))':
         variant() === 'yellow',
@@ -16,10 +16,18 @@
         variant() === 'transparent',
       'w-full': fullWidth(),
     }"
-    [type]="type()"
+    [type]="type() === 'file' ? 'button' : type()"
     [disabled]="disabled()"
-    (click)="clicked.emit($event)"
+    (click)="onButtonClick($event, fileInput)"
   >
     {{ label() }}
   </button>
+  <input
+    #fileInput
+    class="hidden"
+    type="file"
+    [accept]="accept()"
+    [disabled]="disabled()"
+    (change)="onFileSelected($event)"
+  />
 </span>
