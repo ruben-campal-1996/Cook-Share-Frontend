@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { routes } from '../../../../app.routes';
+import { UserDetailsService } from '../../../../api/user-details.service';
 import { HeaderSection } from './header-section';
 
 describe('HeaderSection', () => {
@@ -53,7 +54,7 @@ describe('HeaderSection', () => {
     httpTesting.expectOne('/api/v1/user-details').flush({
       userId: 1,
       nickname: 'cocinero',
-      avatarUrl: null,
+      avatarUrl: './images/avatar.png',
       roleId: 1,
       roleName: 'USER',
       updatedAt: '2026-01-01T00:00:00Z',
@@ -66,9 +67,7 @@ describe('HeaderSection', () => {
     );
     const userButton: HTMLButtonElement | null =
       fixture.nativeElement.querySelector('.header__user-toggle');
-    expect(userButton?.querySelector('img')?.getAttribute('src')).toBe(
-      '/images/avatar_defaultUrl.png',
-    );
+    expect(userButton?.querySelector('img')?.getAttribute('src')).toBe('/images/avatar.png');
 
     userButton?.click();
     fixture.detectChanges();
@@ -107,5 +106,26 @@ describe('HeaderSection', () => {
     await fixture.whenStable();
 
     expect(TestBed.inject(Router).url).toBe('/user-details');
+  });
+
+  it('updates the avatar when the shared avatar signal changes', () => {
+    component.authService.login('user@example.com', 'secret').subscribe();
+    httpTesting.expectOne('/api/v1/auth/token').flush({ token: 'signed-jwt' });
+    fixture.detectChanges();
+    httpTesting.expectOne('/api/v1/user-details').flush({
+      userId: 1,
+      nickname: 'cocinero',
+      avatarUrl: null,
+      roleId: 1,
+      roleName: 'USER',
+      updatedAt: '2026-01-01T00:00:00Z',
+    });
+    fixture.detectChanges();
+
+    TestBed.inject(UserDetailsService).setAvatarUrl('/images/new-avatar.png');
+    fixture.detectChanges();
+
+    const avatar = fixture.nativeElement.querySelector('.header__avatar') as HTMLImageElement;
+    expect(avatar.getAttribute('src')).toBe('/images/new-avatar.png');
   });
 });

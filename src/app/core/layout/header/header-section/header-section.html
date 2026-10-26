@@ -13,13 +13,7 @@
         [attr.aria-expanded]="userMenuOpen()"
         (click)="toggleUserMenu()"
       >
-        <img
-          class="header__avatar"
-          src="/images/avatar_defaultUrl.png"
-          alt=""
-          width="44"
-          height="44"
-        />
+        <img class="header__avatar" [src]="avatarUrl()" alt="" width="44" height="44" />
       </button>
       @if (userMenuOpen()) {
         <nav class="header__menu" aria-label="Menú de usuario" role="menu">
