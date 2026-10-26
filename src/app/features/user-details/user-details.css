@@ -71,7 +71,6 @@
   outline-offset: 2px;
 }
 
-.user-details__save,
 .user-details__deactivate,
 .user-details__message button {
   min-height: 2.75rem;
@@ -86,12 +85,12 @@
 
 .user-details__save {
   margin-top: var(--spacing-md);
-  background: var(--color-primary-600);
+  padding: var(--spacing-sm) var(--spacing-md);
   color: white;
 }
 
-.user-details__save:hover:not(:disabled) {
-  background: var(--color-primary-700);
+.user-details__load:hover {
+  background-color: var(--color-tertiary-400);
 }
 
 .user-details__deactivate-account {

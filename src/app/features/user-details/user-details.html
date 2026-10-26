@@ -42,7 +42,7 @@
           name="avatarUrl"
           type="text"
           maxlength="2048"
-          placeholder="/images/avatar_defaultUrl.png"
+          placeholder="Inserta aquí tu imagen"
           [ngModel]="avatarUrl()"
           (ngModelChange)="avatarUrl.set($event)"
         />
@@ -58,21 +58,23 @@
           </p>
         }
 
-        <button class="user-details__save" type="submit" [disabled]="saving()">
-          {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
-        </button>
+        <div>
+          <app-button
+            class="user-details__save"
+            label="Guardar Cambios"
+            type="submit"
+            [disabled]="saving()"
+          >
+            {{ saving() ? 'Guardando...' : 'Guardar cambios' }}
+          </app-button>
+          <app-button
+            class="user-details__load"
+            label="Cargar imagen"
+            type="file"
+            variant="secondary"
+          ></app-button>
+        </div>
       </form>
-
-      <section class="user-details-favourites" aria-labelledby="deactivate-title">
-        <h2 id="deactivate-title" class="h2-fav">Mis recetas</h2>
-        <p>Revisa tus recetas publicadas y favoritos</p>
-        @if (deleteError(); as message) {
-          <p class="user-details__message user-details__message--error" role="alert">
-            {{ message }}
-          </p>
-        }
-        <app-button label="Mis Recetas" variant="secondary" type="button"> </app-button>
-      </section>
       <section class="user-details__deactivate-account" aria-labelledby="deactivate-title">
         <h2 id="deactivate-title">Desactivar cuenta</h2>
         <p>Desactivar la cuenta cerrará tu sesión y ocultará tu perfil.</p>
@@ -81,14 +83,16 @@
             {{ message }}
           </p>
         }
-        <button
-          class="user-details__deactivate"
+        <app-button
+          class="enabled:hover:bg-red-600"
+          label="Desactivar cuenta"
+          variant="red"
           type="button"
           [disabled]="deleting()"
           (click)="deactivateAccount()"
         >
           {{ deleting() ? 'Desactivando...' : 'Desactivar cuenta' }}
-        </button>
+        </app-button>
       </section>
     </section>
   }
